@@ -1,9 +1,12 @@
 import { Router } from 'express';
-
-// import userRoutes from './userRoutes';
+import loginRoutes from './loginRoutes';
+import signupRoutes from './signupRoutes'
+import contactRoutes from './contactRoutes';
 
 const router = Router();
 
-// router.use('/user', userRoutes);
+router.use('/login', loginRoutes);
+router.use('/signup', signupRoutes);
+router.use('/contacts' contactRoutes);
 
 export default router;
