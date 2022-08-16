@@ -3,7 +3,7 @@ import { Success } from '../domain/Success'
 import { Token } from '../domain/Token'
 import UserModel from '../models/userModel'
 import bcrypt from 'bcrypt'
-
+import jwt from 'jsonwebtoken'
 
 export const login = async (loginInfo: Login): Promise<Success<Token>> => {
 
@@ -22,13 +22,17 @@ export const login = async (loginInfo: Login): Promise<Success<Token>> => {
         }
     }
 
-    //jwt token deu
+    //giving access token
+    const accessToken = jwt.sign(
+        {id: user.id,}, 
+        process.env.JWT_SECRET as string
+    )
 
     return {
-        // data: {
-        //     access: accessToken,
-        //     user_id: user.user_id,
-        // },
-        // message: "User Logged In!",
+        data: {
+            access: accessToken,
+            id: user.id,
+        },
+        message: "User Logged In!",
     }
 }
