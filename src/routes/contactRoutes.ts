@@ -5,8 +5,9 @@ import * as contactController from '../controllers/contactController'
 const router = Router();
 
 router.get('/', contactController.getAllContacts);
-router.post('/', storage.single('photograph'), contactController.addContact);
-router.put('/:contactId', storage.single('photograph'), contactController.updateContact);
+router.get("/:contactId", contactController.getContact);
+router.post('/', storage.single('photo'), contactController.addContact);
+router.put('/:contactId', storage.single('photo'), contactController.updateContact);
 router.delete('/:contactId', contactController.deleteContact);
 
 

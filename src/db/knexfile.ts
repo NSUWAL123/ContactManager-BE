@@ -1,9 +1,9 @@
 import type { Knex } from "knex";
 import dotenv from "dotenv";
 
-dotenv.config ({
-  path: __dirname + '/../../.env',
-})
+dotenv.config({
+  path: __dirname + "/../../.env",
+});
 
 const config: { [key: string]: Knex.Config } = {
   development: {
@@ -15,11 +15,11 @@ const config: { [key: string]: Knex.Config } = {
     },
     pool: {
       min: 2,
-      max: 10
+      max: 10,
     },
     migrations: {
-      tableName: "knex_migrations"
-    }
+      tableName: "knex_migrations",
+    },
   },
 };
 
