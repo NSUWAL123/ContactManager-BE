@@ -1,7 +1,8 @@
+import { Request } from "express";
 import multer from "multer";
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb: Function) {
+  destination: function (req: Request, file, cb: Function) {
     if (file) {
       cb(null, `src/assets/uploads`);
     } else {
@@ -16,6 +17,8 @@ const storage = multer.diskStorage({
     }
   },
 });
+
+// const memStorage = multer.memoryStorage();
 
 const upload = multer({ storage: storage });
 

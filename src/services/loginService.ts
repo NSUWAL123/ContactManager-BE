@@ -6,13 +6,17 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 export const login = async (loginInfo: Login): Promise<Success<Token>> => {
+  //checking if the email is registered or not
   const user = await UserModel.getUserByEmail(loginInfo.email);
-  if (!loginInfo.email || !loginInfo.password) {
+  
+  //if unregistered user tries to login
+  if (!user) {
     return {
-      message: "Invalid user credentials",
+      message: "User not registered yet!!!",
     };
   }
 
+  //using bcrypt to check if input password matches with the password in the database
   const validPassword = await bcrypt.compare(loginInfo.password, user.password);
 
   if (!validPassword) {
@@ -21,7 +25,6 @@ export const login = async (loginInfo: Login): Promise<Success<Token>> => {
     };
   }
 
-  //giving access token
   const accessToken = jwt.sign(
     { id: user.id },
     process.env.JWT_SECRET as string

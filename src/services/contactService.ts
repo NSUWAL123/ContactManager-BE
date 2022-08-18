@@ -36,13 +36,13 @@ export const addContact = async (
     const uploadResponse = await cloudinary.uploader.upload(
       contactDetails.photo,
       {
-        upload_preset: "cloudinary-test",
+        upload_preset: "contact-manager-cloudinary",
       }
     );
 
     const url = uploadResponse.url;
 
-    fs.unlinkSync(contactDetails.photo);
+    // fs.unlinkSync(contactDetails.photo);
 
     const contact = await ContactModel.addContact({
       ...contactDetails,
@@ -51,13 +51,13 @@ export const addContact = async (
 
     return {
       data: contact,
-      message: "Contact Added Successfully!",
+      message: "Successfully added contact",
     };
   } catch (error) {
-    console.log("error:::", error);
-    fs.unlinkSync(contactDetails.photo);
+    console.log("error", error);
+    // fs.unlinkSync(contactDetails.photo);
     return {
-      message: "Cannot add contact!",
+      message: "Contact cannot be added",
     };
   }
 };
@@ -78,7 +78,7 @@ export const updateContact = async (
 
     const url = uploadResponse.url;
 
-    fs.unlinkSync(contactDetails.photo);
+    // fs.unlinkSync(contactDetails.photo);
 
     const contact = await ContactModel.updateContact({
       ...contactDetails,
@@ -87,13 +87,13 @@ export const updateContact = async (
 
     return {
       data: contact,
-      message: "Contact Added Successfully!",
+      message: "Successfully added contact",
     };
   } catch (error) {
-    console.log("error:::", error);
-    fs.unlinkSync(contactDetails.photo);
+    console.log("error", error);
+    // fs.unlinkSync(contactDetails.photo);
     return {
-      message: "Cannot add contact!",
+      message: "Contact cannot be added",
     };
   }
 };
