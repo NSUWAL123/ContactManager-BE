@@ -9,7 +9,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string("address");
     table.string("photo").notNullable();
     table.boolean("is_favourite").defaultTo(false);
-    table.integer("user_id").notNullable().unique();
+    table.integer("user_id").notNullable();
     table
       .foreign("user_id")
       .references("id")

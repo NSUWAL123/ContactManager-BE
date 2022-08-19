@@ -3,12 +3,13 @@ import { Contact, ContactToInsert } from "../domain/Contact";
 import ContactModel from "../models/contactModel";
 import cloudinary from "../config/cloudinary";
 import fs from "fs";
+import logger from "../misc/logger";
 
 export const getAllContacts = async (
   authUser: number | undefined
 ): Promise<Success<Contact[]>> => {
   const contacts = await ContactModel.getAllContacts(authUser);
-
+  logger.info("retrieving all contacts");
   return {
     data: contacts,
     message: "All Contacts retrieved succesfully.",
@@ -30,11 +31,11 @@ export const addContact = async (
   contactDetails: ContactToInsert
 ): Promise<Success<Contact>> => {
   try {
-    if (!fs.existsSync(contactDetails.photo)) {
+    if (!fs.existsSync(contactDetails.photo!)) {
       throw new Error("File not found!");
     }
     const uploadResponse = await cloudinary.uploader.upload(
-      contactDetails.photo,
+      contactDetails.photo!,
       {
         upload_preset: "contact-manager-cloudinary",
       }
@@ -42,7 +43,7 @@ export const addContact = async (
 
     const url = uploadResponse.url;
 
-    // fs.unlinkSync(contactDetails.photo);
+    // fs.unlinkSync(contactDetails.photo!);
 
     const contact = await ContactModel.addContact({
       ...contactDetails,
@@ -55,7 +56,7 @@ export const addContact = async (
     };
   } catch (error) {
     console.log("error", error);
-    // fs.unlinkSync(contactDetails.photo);
+    fs.unlinkSync(contactDetails.photo!);
     return {
       message: "Contact cannot be added",
     };
@@ -66,32 +67,32 @@ export const updateContact = async (
   contactDetails: Contact
 ): Promise<Success<Contact>> => {
   try {
-    if (!fs.existsSync(contactDetails.photo)) {
-      throw new Error("File not found!");
+    let url = "";
+    if (fs.existsSync(contactDetails.photo!)) {
+      const uploadResponse = await cloudinary.uploader.upload(
+        contactDetails.photo!,
+        {
+          upload_preset: "contact-manager-cloudinary",
+        }
+      );
+      url = uploadResponse.url;
+      fs.unlinkSync(contactDetails.photo!);
     }
-    const uploadResponse = await cloudinary.uploader.upload(
-      contactDetails.photo,
-      {
-        upload_preset: "cloudinary-test",
-      }
-    );
 
-    const url = uploadResponse.url;
+    if (url !== "") {
+      contactDetails.photo = url;
+    } else {
+      delete contactDetails.photo; //photo made optional to remove error
+    }
 
-    // fs.unlinkSync(contactDetails.photo);
-
-    const contact = await ContactModel.updateContact({
-      ...contactDetails,
-      photo: url,
-    });
-
+    const contact = await ContactModel.updateContact(contactDetails);
     return {
       data: contact,
       message: "Successfully added contact",
     };
   } catch (error) {
     console.log("error", error);
-    // fs.unlinkSync(contactDetails.photo);
+    fs.unlinkSync(contactDetails.photo!);
     return {
       message: "Contact cannot be added",
     };

@@ -8,6 +8,7 @@ import { StatusCodes } from "http-status-codes";
  * @param {Response} res
  * @param {NextFunction} next
  */
+
 export const notFound = (req: Request, res: Response, next: NextFunction) => {
   const error = new CustomError(
     `Not Found - ${req.originalUrl}`,

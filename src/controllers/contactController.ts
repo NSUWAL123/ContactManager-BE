@@ -54,14 +54,14 @@ export const updateContact = (
   res: Response,
   next: NextFunction
 ) => {
-  const { id } = req.params;
+  const { contactId } = req.params;
   const photo = req.file?.path + "";
   const currentUser = req.authUser;
   const { name, phone, email, address, is_favourite } = req.body;
 
   contactService
     .updateContact({
-      id: +id,
+      id: +contactId,
       name,
       phone,
       email,
@@ -83,10 +83,10 @@ export const deleteContact = (
   res: Response,
   next: NextFunction
 ) => {
-  const { id } = req.params;
+  const { contactId } = req.params;
 
   contactService
-    .deleteContact(+id) //.deleteContact(+id, req.authUser)
+    .deleteContact(+contactId)
     .then((data) => {
       res.json(data);
     })

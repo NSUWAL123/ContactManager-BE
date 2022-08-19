@@ -16,7 +16,9 @@ class UserModel {
 
   public static async createUser(userInfo: UserToInsert): Promise<User[]> {
     logger.info("creating a new user");
-    const newUser = await db(UserModel.table).insert(userInfo).returning("*");
+    const newUser = await db(UserModel.table)
+      .insert(userInfo)
+      .returning("*");
 
     return newUser;
   }

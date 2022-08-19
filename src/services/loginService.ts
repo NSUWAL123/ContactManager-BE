@@ -4,6 +4,7 @@ import { Token } from "../domain/Token";
 import UserModel from "../models/userModel";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import logger from "../misc/logger";
 
 export const login = async (loginInfo: Login): Promise<Success<Token>> => {
   //checking if the email is registered or not
@@ -25,10 +26,14 @@ export const login = async (loginInfo: Login): Promise<Success<Token>> => {
     };
   }
 
+  logger.info("Goint to grant access token")
+
   const accessToken = jwt.sign(
     { id: user.id },
     process.env.JWT_SECRET as string
   );
+  
+  logger.info("Access token granted")
 
   return {
     data: {

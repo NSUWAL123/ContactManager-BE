@@ -39,11 +39,24 @@ class ContactModel {
     return contact;
   }
 
-  public static async updateContact(contactDetails: Contact): Promise<Contact> {
-    const [updatedDetails] = await db(ContactModel.table).where({
-      id: contactDetails.id,
-      user_id: contactDetails.user_id,
-    });
+  public static async updateContact(
+    contactDetails: Contact
+  ): Promise<Contact[]> {
+    const updatedDetails = await db(ContactModel.table)
+      .where({
+        id: contactDetails.id,
+        user_id: contactDetails.user_id,
+      })
+      .update(contactDetails)
+      .returning([
+        "id",
+        "name",
+        "phone",
+        "email",
+        "address",
+        "is_favourite",
+        "user_id",
+      ]);
 
     return updatedDetails;
   }
