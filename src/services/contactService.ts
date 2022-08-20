@@ -43,7 +43,7 @@ export const addContact = async (
 
     const url = uploadResponse.url;
 
-    // fs.unlinkSync(contactDetails.photo!);
+    fs.unlinkSync(contactDetails.photo!);
 
     const contact = await ContactModel.addContact({
       ...contactDetails,
